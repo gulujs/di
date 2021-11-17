@@ -5,7 +5,7 @@ import { VehicleModule } from '../vehicle.module';
 
 @Module({
   imports: [GlobalModule, VehicleModule],
-  scanPaths: [Path.join(__dirname, 'services')],
+  scanPaths: [Path.join(Path.dirname(import.meta.url), 'services')],
   providers: [
     {
       token: 'NAME',

@@ -18,9 +18,10 @@ export const DI_MODULE_EXPORTS_METADATA = '@lunjs/di:module_exports';
 
 export const STATIC_CONTEXT: ContextId = Object.freeze({ id: 0 });
 
-export const SCANNER_FILE_FILTER = ['*.js'];
-// eslint-disable-next-line node/no-deprecated-api,@typescript-eslint/no-unnecessary-condition
-if (require.extensions?.['.ts']) {
+export const SCANNER_FILE_FILTER = ['*.js', '*.mjs'];
+const REGISTER_INSTANCE = Symbol.for('ts-node.register.instance');
+// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+if ((process as any)[REGISTER_INSTANCE]) {
   SCANNER_FILE_FILTER.push('*.ts');
 }
 Object.freeze(SCANNER_FILE_FILTER);

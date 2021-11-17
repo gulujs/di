@@ -1,4 +1,4 @@
-import { Module } from '../../../../src';
+import { Module } from '../../../../../src';
 import { OneModule } from './one.module';
 
 @Module({

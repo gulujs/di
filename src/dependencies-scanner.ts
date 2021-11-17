@@ -1,3 +1,4 @@
+import { pathToFileURL } from 'url';
 import { readdirp } from '@lunjs/readdirp';
 import { SCANNER_FILE_FILTER } from './constants';
 import {
@@ -130,8 +131,7 @@ export class DependenciesScanner {
 
     for (const path of scanPaths) {
       for await (const file of readdirp(path, { type: 'files', fileFilter: SCANNER_FILE_FILTER })) {
-        // eslint-disable-next-line node/global-require,@typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
-        const m = require(file.fullPath) as unknown;
+        const m = await import(pathToFileURL(file.fullPath).toString()) as unknown;
         if (!m || typeof m !== 'object') {
           continue;
         }

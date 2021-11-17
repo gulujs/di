@@ -1,4 +1,5 @@
 import * as Path from 'path';
+import { fileURLToPath } from 'url';
 import { callerPath } from '@lunjs/caller-path';
 import { ModuleMetadata, Type } from '../interfaces';
 import {
@@ -29,8 +30,16 @@ export function Module(metadata: ModuleMetadata): ClassDecorator {
           continue;
         }
 
+        if (path.startsWith('file:')) {
+          scanPaths.push(fileURLToPath(path));
+          continue;
+        }
+
         if (isUndefined(basePath)) {
-          const filename = callerPath({ shift: 1, excludeFileNames: [/node_modules\/reflect-metadata/] })!;
+          let filename = callerPath({ shift: 1, excludeFileNames: [/node_modules\/reflect-metadata/] })!;
+          if (filename.startsWith('file:')) {
+            filename = fileURLToPath(filename);
+          }
           basePath = Path.dirname(filename);
         }
 

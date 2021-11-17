@@ -1,7 +1,8 @@
 import { Global, Module } from '../../../../../src';
+import * as Path from 'path';
 
 @Global()
 @Module({
-  scanPaths: [__dirname]
+  scanPaths: [Path.dirname(import.meta.url)]
 })
 export class GlobalModule {}

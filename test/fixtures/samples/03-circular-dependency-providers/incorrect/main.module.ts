@@ -1,4 +1,4 @@
-import { Module } from '../../../../src';
+import { Module } from '../../../../../src';
 import { OneService } from './one.service';
 import { ChildModule } from './child.module';
 

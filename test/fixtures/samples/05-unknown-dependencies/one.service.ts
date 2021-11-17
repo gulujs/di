@@ -1,5 +1,5 @@
 import { Injectable } from '../../../../src';
-import { TwoService } from '../04-circular-dependency-params/two.service';
+import { TwoService } from './two.service';
 
 @Injectable()
 export class OneService {

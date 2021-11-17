@@ -1,4 +1,4 @@
-import { Injectable } from '../../../../src';
+import { Injectable } from '../../../../../src';
 import { ChildModule } from './child.module';
 
 @Injectable()

@@ -13,4 +13,5 @@ Most of the code are from [NestJS injector](https://github.com/nestjs/nest/tree/
 
 ## License
 
-[MIT](LICENSE)
+- [MIT](LICENSE)
+- [Nest License](https://github.com/nestjs/nest/blob/v8.1.1/LICENSE)

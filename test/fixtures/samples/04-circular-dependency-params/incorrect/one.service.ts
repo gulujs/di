@@ -1,4 +1,4 @@
-import { Injectable } from '../../../../src';
+import { Injectable } from '../../../../../src';
 import { TwoService } from './two.service';
 
 @Injectable()

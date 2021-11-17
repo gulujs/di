@@ -1,5 +1,6 @@
 {
   "extension": ["ts"],
-  "spec": "test/**/*.spec.ts",
-  "require": ["ts-node/register", "test/fixtures/setup.ts"]
+  "node-option": ["experimental-specifier-resolution=node", "loader=ts-node/esm"],
+  "require": ["test/fixtures/setup.ts"],
+  "spec": "test/**/*.spec.ts"
 }
