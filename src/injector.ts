@@ -98,7 +98,8 @@ export class Injector {
 
     if (instance) {
       for (const property of properties) {
-        (instance as Record<string | symbol, unknown>)[property.key] = property.instance;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        (instance as any)[property.key] = property.instance;
       }
 
       if (wrapper.init) {
