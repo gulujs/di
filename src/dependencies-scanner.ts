@@ -136,7 +136,7 @@ export class DependenciesScanner {
           continue;
         }
 
-        for (const target of Object.values(m!)) {
+        for (const target of Object.values(m)) {
           if (isProvider(target)) {
             this.insertProvider(target as Type<unknown>, module);
           }
