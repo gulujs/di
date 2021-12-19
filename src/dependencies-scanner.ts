@@ -24,18 +24,19 @@ export class DependenciesScanner {
   constructor(private readonly _container: Container) {}
 
   async registerCoreModule(coreRawModule: RawModule): Promise<void> {
-    const [module] = await this.scanForModules(coreRawModule);
+    const [module] = await this.scan(coreRawModule);
     if (module) {
       this._container.registerCoreModule(module);
     }
   }
 
-  async scan(rawModule: RawModule): Promise<void> {
-    await this.scanForModules(rawModule);
-    await this.scanModulesForDependencies();
+  async scan(rawModule: RawModule): Promise<ModuleWrapper[]> {
+    const modules = await this.scanForModules(rawModule);
+    await this.scanModulesForDependencies(modules);
     this.calculateModulesDistance();
 
     this._container.bindGlobalModules();
+    return modules;
   }
 
   async scanForModules(
@@ -71,8 +72,11 @@ export class DependenciesScanner {
     return registeredModules;
   }
 
-  async scanModulesForDependencies(): Promise<void> {
-    for (const module of this._container.modules.values()) {
+  async scanModulesForDependencies(modules?: Iterable<ModuleWrapper>): Promise<void> {
+    if (!modules) {
+      modules = this._container.modules.values();
+    }
+    for (const module of modules) {
       await this.reflectImports(module);
       await this.reflectProviders(module);
       await this.reflectExports(module);

@@ -79,6 +79,7 @@ export class Container {
 
   clear(): void {
     this._modules.clear();
+    this._globalModules.clear();
   }
 
   addImport(relatedRawModule: Type<unknown> | DynamicModule, targetModule: ModuleWrapper): void {
