@@ -6,10 +6,10 @@ import {
   ContextId,
   FuncType,
   InitMetadata,
+  ScopeType,
   Token,
   Type
 } from './interfaces';
-import { ScopeType } from './interfaces/scope-type';
 import { ModuleWrapper } from './module-wrapper';
 import { RandomStringFactory } from './random-string-factory';
 import { ScopeEnum } from './scope-enum';

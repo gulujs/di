@@ -1,4 +1,4 @@
-import { ReferenceableToken } from './token';
+import { ReferenceableToken } from './token.interface';
 
 export interface ParamMetadata {
   index: number;

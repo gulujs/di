@@ -1,6 +1,6 @@
-import { Type } from './type';
-import { Token } from './token';
-import { ScopeType } from './scope-type';
+import { Type } from './type.interface';
+import { Token } from './token.interface';
+import { ScopeType } from './scope-type.interface';
 
 export type Provider<T = unknown> = Type<T> | CustomProvider<T>;
 

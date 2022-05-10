@@ -1,4 +1,4 @@
-import { ReferenceableToken, Token } from './token';
+import { ReferenceableToken, Token } from './token.interface';
 
 export interface InjectorParamContext {
   token: Token;

@@ -1,5 +1,5 @@
-import { Type } from './type';
-import { DynamicModuleMetadata } from './dynamic-module';
+import { Type } from './type.interface';
+import { DynamicModuleMetadata } from './dynamic-module.interface';
 
 export interface BasicModule {
   id: string;
