@@ -131,7 +131,7 @@ describe('01-everything', () => {
 
         const animalModule = container.findModule(module => module.metatype === AnimalModule)!;
         const bullWrapper = animalModule.getProviderByToken(BullService)!;
-        expect(bull).to.equal(bullWrapper.getInstanceByContextId(contextId, bullWrapper).instance);
+        expect(bull).to.equal(bullWrapper.getInstanceByContextId(contextId, { wrapper: bullWrapper }).instance);
       });
     });
 

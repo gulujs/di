@@ -1,11 +1,19 @@
 import { STATIC_CONTEXT } from './constants';
 import { isUndefined } from './helpers/common-utils';
 import { isForwardReference } from './helpers/forward-reference-utils';
-import { getConstructorParamsMetadata } from './helpers/metadata-utils';
+import { getConstructorParamsMetadata, getPropertiesMetadata } from './helpers/metadata-utils';
+import { INQUIRER_KEY_OR_INDEX, INQUIRER_TYPE } from './inquirer';
+import {
+  Inquirer,
+  InstancePerContext,
+  InstanceStore
+} from './instance-store';
 import {
   ContextId,
   FuncType,
   InitMetadata,
+  ParamMetadata,
+  PropertyMetadata,
   ScopeType,
   Token,
   Type
@@ -13,6 +21,7 @@ import {
 import { ModuleWrapper } from './module-wrapper';
 import { RandomStringFactory } from './random-string-factory';
 import { ScopeEnum } from './scope-enum';
+
 
 export interface InstanceWrapperMetadata<T = unknown> {
   token: Token;
@@ -30,16 +39,11 @@ export interface InstanceWrapperMetadata<T = unknown> {
   init?: InitMetadata;
 }
 
-export interface InstancePerContext<T> {
-  instance?: T;
-  isResolved: boolean;
-  donePromise?: Promise<void>;
-}
-
 export interface InstancePropertyMetadata {
   key: string | symbol;
   wrapper: InstanceWrapper;
 }
+
 
 export class InstanceWrapper<T = unknown> {
   readonly token: Token;
@@ -54,10 +58,13 @@ export class InstanceWrapper<T = unknown> {
   readonly isAsync: boolean;
   readonly group?: string;
   readonly init?: InitMetadata;
+  readonly hasInquirerTypeToken: boolean;
+  readonly hasInquirerKeyOrIndexToken: boolean;
 
   private readonly _id = RandomStringFactory.create();
-  private readonly _values = new WeakMap<ContextId, InstancePerContext<T>>();
-  private readonly _transientMap?: Map<string, WeakMap<ContextId, InstancePerContext<T>>>;
+
+  private readonly _instanceStore: InstanceStore<T>;
+
   private _isTreeStatic?: boolean;
 
   private _params?: InstanceWrapper[];
@@ -77,21 +84,38 @@ export class InstanceWrapper<T = unknown> {
     this.init = metadata.init;
 
     this.isForwardRef = false;
+    this.hasInquirerTypeToken = false;
+    this.hasInquirerKeyOrIndexToken = false;
     if (this.isNewable) {
       const params = getConstructorParamsMetadata(this.metatype as Type<unknown>);
       if (params) {
         this.isForwardRef = params.some(p => p.token && isForwardReference(p.token));
+        [this.hasInquirerTypeToken, this.hasInquirerKeyOrIndexToken] = this.checkInquirerTokenExists(params);
       }
+      if (!this.hasInquirerKeyOrIndexToken) {
+        const properties = getPropertiesMetadata(this.metatype as Type<unknown>);
+        if (properties) {
+          [this.hasInquirerTypeToken, this.hasInquirerKeyOrIndexToken] = this.checkInquirerTokenExists(properties, this.hasInquirerTypeToken);
+        }
+      }
+
+    } else if (!metadata.isResolved && !this.isAlias) {
+      this.hasInquirerTypeToken = this.inject!.includes(INQUIRER_TYPE);
+      this.hasInquirerKeyOrIndexToken = this.inject!.includes(INQUIRER_KEY_OR_INDEX);
     }
 
-    const instancePerContext = this.createInstance(STATIC_CONTEXT);
-    if (metadata.isResolved) {
-      instancePerContext.instance = metadata.instance;
-      instancePerContext.isResolved = metadata.isResolved;
-    }
+    this._instanceStore = new InstanceStore(this);
 
-    if (this.isTransient) {
-      this._transientMap = new Map();
+    if (!this.hasInquirerTypeToken && !this.hasInquirerKeyOrIndexToken) {
+      const instancePerContext = this.createInstance(STATIC_CONTEXT);
+      if (metadata.isResolved) {
+        instancePerContext.instance = metadata.instance;
+        instancePerContext.isResolved = metadata.isResolved;
+      }
+    } else {
+      // Once inject INQUIRER_TYPE or INQUIRER_KEY_OR_INDEX,
+      // the scope of provider will be implicitly changed to `ScopeEnum.Transient`.
+      this.scope = ScopeEnum.Transient;
     }
   }
 
@@ -107,25 +131,36 @@ export class InstanceWrapper<T = unknown> {
     return this.scope === ScopeEnum.Transient;
   }
 
-  getInstanceByContextId(contextId: ContextId, inquirer?: InstanceWrapper): InstancePerContext<T> {
-    if (this.isTransient && inquirer) {
-      return this.getInstanceByInquirer(contextId, inquirer);
+  getInstanceByContextId(
+    contextId: ContextId,
+    inquirer?: Inquirer
+  ): InstancePerContext<T> {
+    if (this.isTransient) {
+      const instancePerContext = this._instanceStore.getTransientInstance(contextId, inquirer);
+      if (instancePerContext) {
+        return instancePerContext;
+      }
+      return this.cloneTransientInstance(contextId, inquirer);
     }
 
-    const instancePerContext = this._values.get(contextId);
+    const instancePerContext = this._instanceStore.getInstance(contextId);
     if (instancePerContext) {
       return instancePerContext;
     }
     return this.cloneStaticInstance(contextId);
   }
 
-  setInstanceByContextId(contextId: ContextId, value: InstancePerContext<T>, inquirer?: InstanceWrapper): void {
-    if (this.isTransient && inquirer) {
-      this.setInstanceByInquirer(contextId, inquirer, value);
+  setInstanceByContextId(
+    contextId: ContextId,
+    value: InstancePerContext<T>,
+    inquirer?: Inquirer
+  ): void {
+    if (this.isTransient) {
+      this._instanceStore.setTransientInstance(contextId, value, inquirer);
       return;
     }
 
-    this._values.set(contextId, value);
+    this._instanceStore.setInstance(contextId, value);
   }
 
   getCtorParamsMetadata(): InstanceWrapper[] | undefined {
@@ -150,34 +185,12 @@ export class InstanceWrapper<T = unknown> {
     this._properties.push({ key, wrapper });
   }
 
-  private getInstanceByInquirer(contextId: ContextId, inquirer: InstanceWrapper): InstancePerContext<T> {
-    let collection = this._transientMap!.get(inquirer.id);
-    if (!collection) {
-      collection = new WeakMap();
-      this._transientMap!.set(inquirer.id, collection);
-    }
-    const instancePerContext = collection.get(contextId);
-    if (instancePerContext) {
-      return instancePerContext;
-    }
-    return this.cloneTransientInstance(contextId, inquirer);
-  }
-
-  private setInstanceByInquirer(contextId: ContextId, inquirer: InstanceWrapper, value: InstancePerContext<T>): void {
-    let collection = this._transientMap!.get(inquirer.id);
-    if (!collection) {
-      collection = new WeakMap();
-      this._transientMap!.set(inquirer.id, collection);
-    }
-    collection.set(contextId, value);
-  }
-
-  createInstance(contextId: ContextId, inquirer?: InstanceWrapper): InstancePerContext<T> {
+  createInstance(contextId: ContextId, inquirer?: Inquirer): InstancePerContext<T> {
     const instancePerContext: InstancePerContext<T> = {
       instance: undefined,
       isResolved: false
     };
-    if (this.isNewable && this.isForwardRef) {
+    if (this.isNewable && this.isForwardRef && !this.isTransient) {
       instancePerContext.instance = Object.create(this.metatype!.prototype as object) as T;
     }
     this.setInstanceByContextId(contextId, instancePerContext, inquirer);
@@ -191,7 +204,7 @@ export class InstanceWrapper<T = unknown> {
     return this.createInstance(contextId);
   }
 
-  cloneTransientInstance(contextId: ContextId, inquirer: InstanceWrapper): InstancePerContext<T> {
+  cloneTransientInstance(contextId: ContextId, inquirer?: Inquirer): InstancePerContext<T> {
     return this.createInstance(contextId, inquirer);
   }
 
@@ -226,12 +239,33 @@ export class InstanceWrapper<T = unknown> {
   }
 
   getStaticTransientInstances(): InstancePerContext<T>[] {
-    if (!this._transientMap) {
+    if (!this.isTransient) {
       return [];
     }
 
-    return [...this._transientMap.values()]
-      .map(it => it.get(STATIC_CONTEXT))
-      .filter(it => it) as InstancePerContext<T>[];
+    return this._instanceStore.getAllTransientInstances(STATIC_CONTEXT);
+  }
+
+  private checkInquirerTokenExists(
+    params: ParamMetadata[] | PropertyMetadata[],
+    hasInquirerTypeToken = false
+  ): [boolean, boolean] {
+    let hasInquirerKeyOrIndexToken = false;
+
+    for (const param of params) {
+      if (!param.token) {
+        continue;
+      }
+      if (param.token === INQUIRER_KEY_OR_INDEX) {
+        hasInquirerKeyOrIndexToken = true;
+      } else if (param.token === INQUIRER_TYPE) {
+        hasInquirerTypeToken = true;
+      }
+      if (hasInquirerTypeToken && hasInquirerKeyOrIndexToken) {
+        break;
+      }
+    }
+
+    return [hasInquirerTypeToken, hasInquirerKeyOrIndexToken];
   }
 }

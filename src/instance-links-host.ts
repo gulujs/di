@@ -6,6 +6,7 @@ import { isFunction, isString } from './helpers/common-utils';
 import { UnknownElementError, UnknownModuleError } from './errors';
 import { stringifyToken } from './helpers/token-utils';
 
+
 export interface InstanceLink<T = unknown> {
   token: Token;
   wrapper: InstanceWrapper<T>;
@@ -25,7 +26,9 @@ interface InstanceLinksJar {
   tokensMap: Map<string, Array<Type<unknown> | Abstract<unknown>>>;
 }
 
-const CONTAINER_ID = Symbol('CONTAINER_ID');
+
+const CONTAINER_ID = Symbol('@lunjs/di:CONTAINER_ID');
+
 
 export class InstanceLinksHost {
   private readonly _instanceLinksJarMap = new Map<string | symbol, InstanceLinksJar>();

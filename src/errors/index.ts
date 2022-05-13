@@ -1,4 +1,5 @@
 export * from './circular-dependency-error';
+export * from './decorator-has-been-applied-error';
 export * from './invalid-class-error';
 export * from './invalid-class-scope-error';
 export * from './runtime-error';

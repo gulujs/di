@@ -1,6 +1,7 @@
 import { Type } from '../interfaces';
 import { getInitMetadata, setInitMetadata } from '../helpers/metadata-utils';
-import { DecoratorHasBeenAppliedError } from '../errors/decorator-has-been-applied-error';
+import { DecoratorHasBeenAppliedError } from '../errors';
+
 
 export function Init(): MethodDecorator {
   return (target: object, key: string | symbol, _descriptor: TypedPropertyDescriptor<any>): void => {
