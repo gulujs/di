@@ -1,20 +1,20 @@
 import { ContextId } from './interfaces';
 
-export const DESIGN_TYPE_METADATA = 'design:type';
-export const DESIGN_PARAMTYPES_METADATA = 'design:paramtypes';
-export const DI_INJECTABLE_METADATA = '@lunjs/di:injectable';
-export const DI_PROVIDER_GROUP_METADATA = '@lunjs/di:provider_group';
-export const DI_GLOBAL_METADATA = '@lunjs/di:global';
-export const DI_SCOPE_METADATA = '@lunjs/di:scope';
-export const DI_CONSTRUCTOR_PARAMS_METADATA = '@lunjs/di:ctor_params';
-export const DI_OPTIONAL_CONSTRUCTOR_PARAMS_METADATA = '@lunjs/di:optional_ctor_params';
-export const DI_PROPERTIES_METADATA = '@lunjs/di:properties';
-export const DI_OPTIONAL_PROPERTIES_METADATA = '@lunjs/di:optional_properties';
-export const DI_INIT_METADATA = '@lunjs/di:init';
-export const DI_MODULE_IMPORTS_METADATA = '@lunjs/di:module_imports';
-export const DI_MODULE_PROVIDERS_SCAN_PATHS_METADATA = '@lunjs/di:module_providers_scan_paths';
-export const DI_MODULE_PROVIDERS_METADATA = '@lunjs/di:module_providers';
-export const DI_MODULE_EXPORTS_METADATA = '@lunjs/di:module_exports';
+export const METADATA_KEY_DESIGN_TYPE = 'design:type';
+export const METADATA_KEY_DESIGN_PARAMTYPES = 'design:paramtypes';
+export const METADATA_KEY_DI_INJECTABLE = '@lunjs/di:injectable';
+export const METADATA_KEY_DI_PROVIDER_GROUP = '@lunjs/di:provider_group';
+export const METADATA_KEY_DI_GLOBAL = '@lunjs/di:global';
+export const METADATA_KEY_DI_SCOPE = '@lunjs/di:scope';
+export const METADATA_KEY_DI_CONSTRUCTOR_PARAMS = '@lunjs/di:ctor_params';
+export const METADATA_KEY_DI_OPTIONAL_CONSTRUCTOR_PARAMS = '@lunjs/di:optional_ctor_params';
+export const METADATA_KEY_DI_PROPERTIES = '@lunjs/di:properties';
+export const METADATA_KEY_DI_OPTIONAL_PROPERTIES = '@lunjs/di:optional_properties';
+export const METADATA_KEY_DI_INIT = '@lunjs/di:init';
+export const METADATA_KEY_DI_MODULE_IMPORTS = '@lunjs/di:module_imports';
+export const METADATA_KEY_DI_MODULE_PROVIDERS_SCAN_PATHS = '@lunjs/di:module_providers_scan_paths';
+export const METADATA_KEY_DI_MODULE_PROVIDERS = '@lunjs/di:module_providers';
+export const METADATA_KEY_DI_MODULE_EXPORTS = '@lunjs/di:module_exports';
 
 export const STATIC_CONTEXT: ContextId = Object.freeze({ id: 0 });
 
