@@ -8,14 +8,12 @@ import {
   DynamicModuleMetadata,
   Provider,
   ExportedComponent,
-  ContextId,
   DynamicModule
 } from './interfaces';
 import { ModuleCompiler } from './module-compiler';
 import { ModuleTokenFactory } from './module-token-factory';
 import { ModuleWrapper } from './module-wrapper';
 import { getGlobalMetadata } from './helpers/metadata-utils';
-import { REQUEST } from './request';
 import { isUndefined } from './helpers/common-utils';
 
 export class Container {
@@ -129,10 +127,5 @@ export class Container {
         targetModule.addRelatedModule(globalModule);
       }
     });
-  }
-
-  registerRequestProvider<T = unknown>(request: T, contextId: ContextId): void {
-    const wrapper = this._internalCoreModule!.getProviderByToken(REQUEST);
-    wrapper!.setInstanceByContextId(contextId, { instance: request, isResolved: true });
   }
 }

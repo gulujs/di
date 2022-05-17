@@ -27,7 +27,6 @@ import { isInjectorParamContext } from './helpers/injector-utils';
 import { INQUIRER_KEY_OR_INDEX, INQUIRER_TYPE } from './inquirer';
 import { Inquirer, InstancePerContext } from './instance-store';
 
-
 export interface PropertyDependency extends PropertyMetadata {
   isOptional?: boolean;
   instance?: unknown;

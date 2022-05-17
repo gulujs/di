@@ -1,13 +1,12 @@
 import {
-  ContextIdFactory,
   Inject,
   Injectable,
   ModuleRef,
-  REQUEST,
   Scope,
   ScopeEnum,
   SearchScope
 } from '../../../../../../src';
+import { getByRequest, REQUEST } from '../../../../request';
 import { BirdService } from '../../animal.module/services/bird.service';
 import { BullService } from '../../animal.module/services/bull.service';
 
@@ -21,7 +20,7 @@ export class AsdfService {
   ) {}
 
   resolveBull(): Promise<BullService> {
-    const contextId = ContextIdFactory.getByRequest(this.request);
+    const contextId = getByRequest(this.request);
     return this.moduleRef.resolve(BullService, contextId, { searchScope: SearchScope.Container });
   }
 }

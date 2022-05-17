@@ -18,6 +18,7 @@ import { GlobalModule } from '../fixtures/samples/01-everything/global.module';
 import { BazService } from '../fixtures/samples/01-everything/main.module/services/baz.service';
 import { AsdfService } from '../fixtures/samples/01-everything/main.module/services/asdf.service';
 import { BullService } from '../fixtures/samples/01-everything/animal.module/services/bull.service';
+import { registerRequestProvider, requestProvider, setForRequest } from '../fixtures/request';
 
 describe('01-everything', () => {
   let container: Container;
@@ -27,7 +28,7 @@ describe('01-everything', () => {
   beforeEach(async () => {
     container = new Container();
     const scanner = new DependenciesScanner(container);
-    await scanner.registerCoreModule(InternalCoreModule);
+    await scanner.registerCoreModule(InternalCoreModule.register([requestProvider]));
     await scanner.scan(MainModule);
 
     const instanceLoader = new InstanceLoader(container);
@@ -121,8 +122,8 @@ describe('01-everything', () => {
       it('should resolve the instance', async () => {
         const contextId = ContextIdFactory.create();
         const request = {};
-        ContextIdFactory.setForRequest(request, contextId);
-        container.registerRequestProvider(request, contextId);
+        setForRequest(request, contextId);
+        registerRequestProvider(container, request, contextId);
         const asdfWrapper = mainModule.getProviderByToken(AsdfService)!;
 
         const asdfInstance = await injector.loadPerContext(asdfWrapper, mainModule, contextId);

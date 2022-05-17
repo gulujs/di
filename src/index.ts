@@ -4,7 +4,6 @@ export * from './helpers';
 export * from './inquirer';
 export * from './instance-store';
 export * from './interfaces';
-export * from './request';
 export * from './constants';
 export * from './container';
 export * from './context-id-factory';

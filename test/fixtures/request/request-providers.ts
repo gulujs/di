@@ -1,8 +1,6 @@
-import { ScopeEnum } from '../scope-enum';
-import { Provider } from '../interfaces';
+import { Provider, ScopeEnum } from '../../../src';
 import { REQUEST } from './request-constants';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = (): void => {};
 
 export const requestProvider: Provider = {

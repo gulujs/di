@@ -9,6 +9,11 @@ import {
   InternalCoreModule,
   ModuleWrapper
 } from '../../src';
+import {
+  registerRequestProvider,
+  requestProvider,
+  setForRequest
+} from '../fixtures/request';
 import { HelloController } from '../fixtures/samples/06-inject-inquirer/hello.controller';
 import { HelloModule } from '../fixtures/samples/06-inject-inquirer/hello.module';
 
@@ -20,7 +25,7 @@ describe('06-inject-inquirer', () => {
   beforeEach(async () => {
     container = new Container();
     const scanner = new DependenciesScanner(container);
-    await scanner.registerCoreModule(InternalCoreModule);
+    await scanner.registerCoreModule(InternalCoreModule.register([requestProvider]));
     await scanner.scan(HelloModule);
 
     const instanceLoader = new InstanceLoader(container);
@@ -40,8 +45,8 @@ describe('06-inject-inquirer', () => {
 
     const contextId = ContextIdFactory.create();
     const request = {};
-    ContextIdFactory.setForRequest(request, contextId);
-    container.registerRequestProvider(request, contextId);
+    setForRequest(request, contextId);
+    registerRequestProvider(container, request, contextId);
 
     const helloControllerWrapper = helloModule.getProviderByToken(HelloController)!;
 
@@ -59,8 +64,8 @@ describe('06-inject-inquirer', () => {
 
     const contextId = ContextIdFactory.create();
     const request = {};
-    ContextIdFactory.setForRequest(request, contextId);
-    container.registerRequestProvider(request, contextId);
+    setForRequest(request, contextId);
+    registerRequestProvider(container, request, contextId);
 
     const helloControllerWrapper = helloModule.getProviderByToken(HelloController)!;
 

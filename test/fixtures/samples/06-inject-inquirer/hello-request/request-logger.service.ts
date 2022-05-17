@@ -3,12 +3,11 @@ import {
   Inject,
   Injectable,
   INQUIRER_TYPE,
-  REQUEST,
   Scope,
   ScopeEnum
 } from '../../../../../src';
+import { REQUEST } from '../../../request';
 import { HelloRequestService } from './hello-request.service';
-
 
 @Scope(ScopeEnum.Transient)
 @Injectable()

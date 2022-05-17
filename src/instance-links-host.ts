@@ -27,7 +27,7 @@ interface InstanceLinksJar {
 }
 
 
-const CONTAINER_ID = Symbol('@lunjs/di:CONTAINER_ID');
+const CONTAINER_ID = Symbol('@lunjs/di:container_id');
 
 
 export class InstanceLinksHost {
