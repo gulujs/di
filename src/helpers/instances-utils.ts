@@ -10,11 +10,9 @@ export function getTransientInstances(wrappers: InstanceWrapper[]): unknown[] {
 
     const instanceHosts = wrapper.getStaticTransientInstances();
     for (const { instance } of instanceHosts) {
-      if (!instance) {
-        continue;
+      if (instance) {
+        instances.push(instance);
       }
-
-      instances.push(instance);
     }
   }
 
@@ -25,11 +23,13 @@ export function getNonTransientInstances(wrappers: InstanceWrapper[]): unknown[]
   const instances: unknown[] = [];
 
   for (const wrapper of wrappers) {
-    if (!wrapper.isDependencyTreeStatic() || wrapper.isTransient) {
-      continue;
+    if (
+      wrapper.isDependencyTreeStatic()
+      && !wrapper.isTransient
+      && wrapper.instance
+    ) {
+      instances.push(wrapper.instance);
     }
-
-    instances.push(wrapper.instance);
   }
 
   return instances;
