@@ -1,6 +1,7 @@
 import hash from 'object-hash';
-import { DynamicModuleMetadata, Type } from './interfaces';
 import stringify from 'fast-safe-stringify';
+import { isFunction, isSymbol } from '@lunjs/utils/type';
+import { DynamicModuleMetadata, Type } from './interfaces';
 import { TypeIdFactory } from './type-id-factory';
 
 export class ModuleTokenFactory {
@@ -22,14 +23,14 @@ export class ModuleTokenFactory {
   }
 
   private replacer(_key: string, value: unknown): unknown {
-    if (typeof value === 'function') {
+    if (isFunction(value)) {
       const funcAsString = value.toString();
       if (/^class\s/.test(funcAsString)) {
         return `Class(${TypeIdFactory.get(value as Type<unknown>)})`;
       }
       return `Function(${hash(funcAsString)})`;
     }
-    if (typeof value === 'symbol') {
+    if (isSymbol(value)) {
       return value.toString();
     }
     return value;

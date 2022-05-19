@@ -3,6 +3,22 @@
   "globals": {
     "NodeJS":"readonly"
   },
+  "rules": {
+    "node/no-missing-import": [
+      "error",
+      {
+        "allowModules": [
+          "@lunjs/utils"
+        ],
+        "tryExtensions": [
+          ".js",
+          ".json",
+          ".node",
+          ".ts"
+        ]
+      }
+    ]
+  },
   "overrides": [
     {
       "files": ["test/**/*"],

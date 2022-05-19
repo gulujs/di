@@ -1,5 +1,11 @@
 // eslint-disable-next-line max-classes-per-file
 import {
+  isFunction,
+  isString,
+  isSymbol,
+  isUndefined
+} from '@lunjs/utils/type';
+import {
   ClassProvider,
   CustomProvider,
   DynamicModule,
@@ -24,12 +30,6 @@ import {
   isAliasProvider,
   isValueProvider
 } from './helpers/provider-utils';
-import {
-  isFunction,
-  isString,
-  isSymbol,
-  isUndefined
-} from './helpers/common-utils';
 import { isDynamicModule } from './helpers/module-utils';
 import {
   getInitMetadata,

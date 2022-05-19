@@ -1,5 +1,5 @@
+import { isFunction } from '@lunjs/utils/type';
 import { ReferenceableToken, Token } from '../interfaces';
-import { isFunction } from './common-utils';
 import { isForwardReference } from './forward-reference-utils';
 
 export function stringifyToken(token: Token): string {

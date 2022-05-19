@@ -1,4 +1,4 @@
-import { isUndefined } from '../helpers/common-utils';
+import { isUndefined } from '@lunjs/utils/type';
 import { RuntimeError } from './runtime-error';
 
 export class UndefinedModuleError extends RuntimeError {

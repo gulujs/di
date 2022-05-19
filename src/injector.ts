@@ -1,10 +1,10 @@
+import { isUndefined } from '@lunjs/utils/type';
 import {
   RuntimeError,
   UndefinedDependencyError,
   UnknownDependenciesError
 } from './errors';
 import { STATIC_CONTEXT } from './constants';
-import { isUndefined } from './helpers/common-utils';
 import {
   getConstructorParamsMetadata,
   getDesignParamtypesMetadata,

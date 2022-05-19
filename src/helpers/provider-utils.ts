@@ -1,3 +1,4 @@
+import { isFunction, isUndefined } from '@lunjs/utils/type';
 import {
   ClassProvider,
   CustomProvider,
@@ -7,7 +8,6 @@ import {
   Type,
   ValueProvider
 } from '../interfaces';
-import { isFunction, isUndefined } from './common-utils';
 import { getInjectableMetadata } from './metadata-utils';
 
 export function isCustomProvider(provider: Provider): provider is CustomProvider {

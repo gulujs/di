@@ -1,6 +1,7 @@
 import * as Path from 'path';
 import { fileURLToPath } from 'url';
 import { callerPath } from '@lunjs/caller-path';
+import { isUndefined } from '@lunjs/utils/type';
 import { ModuleMetadata, Type } from '../interfaces';
 import {
   setModuleExportsMetadata,
@@ -8,7 +9,6 @@ import {
   setModuleProvidersMetadata,
   setModuleProvidersScanPathsMetadata
 } from '../helpers/metadata-utils';
-import { isUndefined } from '../helpers/common-utils';
 
 export function Module(metadata: ModuleMetadata): ClassDecorator {
   return (target: object): void => {

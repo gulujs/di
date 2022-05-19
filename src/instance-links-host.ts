@@ -1,11 +1,10 @@
+import { isFunction, isString } from '@lunjs/utils/type';
 import { Abstract, Token, Type } from './interfaces';
 import { Container } from './container';
 import { InstanceWrapper } from './instance-wrapper';
 import { ModuleWrapper } from './module-wrapper';
-import { isFunction, isString } from './helpers/common-utils';
 import { UnknownElementError, UnknownModuleError } from './errors';
 import { stringifyToken } from './helpers/token-utils';
-
 
 export interface InstanceLink<T = unknown> {
   token: Token;

@@ -1,4 +1,3 @@
-export * as commonUtils from './common-utils';
 export * as forwardReferenceUtils from './forward-reference-utils';
 export * as injectorUtils from './injector-utils';
 export * as instancesUtils from './instances-utils';

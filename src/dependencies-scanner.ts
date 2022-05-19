@@ -1,5 +1,6 @@
 import { pathToFileURL } from 'url';
 import { readdirp } from '@lunjs/readdirp';
+import { isUndefined } from '@lunjs/utils/type';
 import { SCANNER_FILE_FILTER } from './constants';
 import {
   ExportedComponent,
@@ -17,7 +18,6 @@ import {
   getModuleProvidersScanPathsMetadata
 } from './helpers/metadata-utils';
 import { isProvider } from './helpers/provider-utils';
-import { isUndefined } from './helpers/common-utils';
 import { isForwardReference } from './helpers/forward-reference-utils';
 
 export class DependenciesScanner {

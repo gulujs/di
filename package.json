@@ -8,6 +8,33 @@
   "files": [
     "dist/"
   ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./decorators": "./dist/decorators/index.js",
+    "./errors": "./dist/errors/index.js",
+    "./helpers": "./dist/helpers/index.js",
+    "./inquirer": "./dist/inquirer/index.js",
+    "./interfaces": "./dist/interfaces/index.js"
+  },
+  "typesVersions": {
+    "*": {
+      "decorators": [
+        "dist/decorators/index.d.ts"
+      ],
+      "errors": [
+        "dist/errors/index.d.ts"
+      ],
+      "helpers": [
+        "dist/helpers/index.d.ts"
+      ],
+      "inquirer": [
+        "dist/inquirer/index.d.ts"
+      ],
+      "interfaces": [
+        "dist/interfaces/index.d.ts"
+      ]
+    }
+  },
   "scripts": {
     "build": "rimraf ./dist && tsc --project tsconfig.build.json && ensure-esm-import-explicit --source ./dist --in-place",
     "lint": "eslint --report-unused-disable-directives --ignore-path .gitignore --ext .ts ./src ./test",
@@ -34,6 +61,7 @@
   "dependencies": {
     "@lunjs/caller-path": "^0.2.0",
     "@lunjs/readdirp": "^0.2.0",
+    "@lunjs/utils": "^0.1.1",
     "camelcase": "^6.3.0",
     "fast-safe-stringify": "^2.1.1",
     "nanoid": "^3.3.4",
@@ -44,15 +72,15 @@
   },
   "devDependencies": {
     "@lunjs/ensure-esm-import-explicit": "^0.1.0",
-    "@lunjs/eslint-config": "^0.4.3",
+    "@lunjs/eslint-config": "^0.4.4",
     "@types/chai": "^4.3.1",
     "@types/mocha": "^9.1.1",
-    "@types/node": "^16.11.35",
+    "@types/node": "^16.11.36",
     "@types/object-hash": "^2.2.1",
     "@types/sinon": "^10.0.11",
-    "@typescript-eslint/eslint-plugin": "^5.23.0",
-    "@typescript-eslint/parser": "^5.23.0",
-    "c8": "^7.11.2",
+    "@typescript-eslint/eslint-plugin": "^5.25.0",
+    "@typescript-eslint/parser": "^5.25.0",
+    "c8": "^7.11.3",
     "chai": "^4.3.6",
     "eslint": "^8.15.0",
     "eslint-plugin-node": "^11.1.0",

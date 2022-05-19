@@ -1,4 +1,4 @@
-import { isFunction, isNil } from './helpers/common-utils';
+import { isFunction, isNil } from '@lunjs/utils/type';
 
 export class MetadataScanner {
   scanFromPrototype<R = unknown>(

@@ -1,4 +1,4 @@
-import { isUndefined } from '../helpers/common-utils';
+import { isUndefined } from '@lunjs/utils/type';
 import { isForwardReference } from '../helpers/forward-reference-utils';
 import { isInjectorParamContext } from '../helpers/injector-utils';
 import { stringifyToken } from '../helpers/token-utils';

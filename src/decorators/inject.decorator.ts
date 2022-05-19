@@ -1,3 +1,4 @@
+import { isNumber, isUndefined } from '@lunjs/utils/type';
 import { ReferenceableToken, Type } from '../interfaces';
 import {
   getConstructorParamsMetadata,
@@ -11,7 +12,7 @@ import { UnsupportedDecoratorUsageError } from '../errors';
 export function Inject(token?: ReferenceableToken) {
   return (target: object, key: string | symbol, index?: number): void => {
     // class constructor params
-    if (typeof key === 'undefined' && typeof index === 'number') {
+    if (isUndefined(key) && isNumber(index)) {
       let params = getConstructorParamsMetadata(target as Type<unknown>) || [];
       params = [
         ...params,
@@ -25,7 +26,7 @@ export function Inject(token?: ReferenceableToken) {
     }
 
     // class properties
-    if (typeof key !== 'undefined' && typeof index === 'undefined') {
+    if (!isUndefined(key) && isUndefined(index)) {
       token = token || getDesignTypeMetadata(target, key);
       let properties = getPropertiesMetadata(target.constructor as Type<unknown>) || [];
       properties = [

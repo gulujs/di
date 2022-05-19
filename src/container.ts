@@ -1,3 +1,4 @@
+import { isUndefined } from '@lunjs/utils/type';
 import {
   CircularDependencyError,
   UndefinedModuleError,
@@ -14,7 +15,6 @@ import { ModuleCompiler } from './module-compiler';
 import { ModuleTokenFactory } from './module-token-factory';
 import { ModuleWrapper } from './module-wrapper';
 import { getGlobalMetadata } from './helpers/metadata-utils';
-import { isUndefined } from './helpers/common-utils';
 
 export class Container {
   private readonly _moduleTokenFactory = new ModuleTokenFactory();

@@ -1,5 +1,5 @@
+import { isUndefined } from '@lunjs/utils/type';
 import { STATIC_CONTEXT } from './constants';
-import { isUndefined } from './helpers/common-utils';
 import { isForwardReference } from './helpers/forward-reference-utils';
 import { getConstructorParamsMetadata, getPropertiesMetadata } from './helpers/metadata-utils';
 import { INQUIRER_KEY_OR_INDEX, INQUIRER_TYPE } from './inquirer';
@@ -21,7 +21,6 @@ import {
 import { ModuleWrapper } from './module-wrapper';
 import { RandomStringFactory } from './random-string-factory';
 import { ScopeEnum } from './scope-enum';
-
 
 export interface InstanceWrapperMetadata<T = unknown> {
   token: Token;
