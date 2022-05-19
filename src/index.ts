@@ -14,6 +14,7 @@ export * from './instance-links-host';
 export * from './instance-loader';
 export * from './instance-wrapper';
 export * from './internal-core-module';
+export * from './metadata-scanner';
 export * from './module-compiler';
 export * from './module-ref';
 export * from './module-token-factory';
